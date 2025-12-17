@@ -2,45 +2,101 @@
 
 namespace App\Livewire;
 
+use App\Models\Vote;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CandidateList extends Component
 {
-    // Property untuk menampilkan modal
     public $showModal = false;
+    public $selectedCandidate = null;
+    public $voteSuccess = false;
+    
+public function mount()
+{
+    $user = Auth::user();
 
-    // Property untuk menyimpan kandidat yang dipilih
-    public $selectedCandidate;
+    // Kalau belum login
+    if (!$user) {
+        return redirect()->route('login');
+    }
 
-    // Fungsi ketika tombol "Ya, Pilih Kandidat Ini" diklik
-    public function confirmVote()
+    // Kalau sudah vote, langsung blok
+    if ($user->has_voted) {
+        abort(403);
+        // ATAU redirect:
+        // return redirect()->route('vote.success');
+    }
+}
+
+    public function openModal()
     {
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+    }
+
+    public function selectCandidate($candidateId)
+    {
+        // Ambil user yang sedang login
         $user = Auth::user();
 
-        // Cek apakah user sudah vote
-        if ($user->has_voted) {
-            session()->flash('message', 'Anda sudah melakukan voting!');
-            $this->showModal = false;
-            return;
+        // Validasi: cek apakah user sudah login
+        if (!$user) {
+            session()->flash('error', 'Silakan login terlebih dahulu');
+            return redirect()->route('login');
         }
 
-        // Simpan vote (contoh)
-        \App\Models\Vote::create([
-            'user_id' => $user->id,
-            'candidate_id' => $this->selectedCandidate,
-        ]);
+        // Validasi: cek apakah user sudah vote
+        if ($user->has_voted) {
+            session()->flash('error', 'Anda sudah melakukan voting sebelumnya');
+            return redirect()->back();
+        }
 
-        // Tandai user sudah vote
-        $user->has_voted = true;
-        $user->save();
+        try {
+            DB::transaction(function () use ($candidateId, $user) {
+                // Simpan vote
+                Vote::create([
+                    'user_id' => $user->id,
+                    'candidate_id' => $candidateId,
+                ]);
 
-        $this->showModal = false;
+                // Update status has_voted menggunakan DB query langsung
+                // Cara 1: Menggunakan DB query (lebih reliable di dalam transaction)
+                DB::table('users')
+                    ->where('id', $user->id)
+                    ->update(['has_voted' => true, 'updated_at' => now()]);
+                
+                // ATAU Cara 2: Refresh model lalu save (pilih salah satu)
+                // $user->refresh();
+                // $user->has_voted = true;
+                // $user->save();
+            });
 
-        session()->flash('message', 'Terima kasih, vote Anda berhasil!');
+            session()->flash('success', 'Vote berhasil disimpan!');
+            return redirect()->route('vote.success');
+            
+        } catch (\Exception $e) {
+            // Log error untuk debugging
+            Log::error('Voting Error: ' . $e->getMessage());
+            
+            session()->flash('error', 'Terjadi kesalahan saat menyimpan vote: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
+
     public function render()
     {
-        return view('livewire.candidate-list');
+        // Ambil semua candidate untuk ditampilkan
+        $candidates = \App\Models\Candidate::all();
+        
+        return view('livewire.candidate-list', [
+            'candidates' => $candidates
+        ]);
     }
 }

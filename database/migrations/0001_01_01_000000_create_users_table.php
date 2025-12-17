@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nis')->unique();
             $table->string('password');
+            $table->string('role')->default('siswa');
+            $table->boolean('has_voted')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

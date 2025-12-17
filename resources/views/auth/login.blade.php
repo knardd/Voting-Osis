@@ -1,48 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login OSIS</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Sistem Voting</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <div class="min-h-screen flex justify-center items-center p-4">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h1 class="text-xl font-semibold mb-4 text-center">Login Pemilihan OSIS</h1>
+<body class="bg-gradient-to-br from-purple-100 via-blue-50 to-pink-100 min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+  
+  <!-- Decorative Background Circles -->
+  <div class="absolute top-10 right-20 w-32 h-32 bg-blue-400 rounded-full opacity-20 blur-3xl"></div>
+  <div class="absolute bottom-20 left-20 w-40 h-40 bg-pink-400 rounded-full opacity-20 blur-3xl"></div>
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-300 rounded-full opacity-10 blur-3xl"></div>
 
-        @if($errors->any())
-            <div class="mb-3 bg-red-100 text-red-700 p-2 rounded">
-                {{ $errors->first() }}
-            </div>
-        @endif
+  <!-- Login Card -->
+  <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md relative z-10">
+    
+    <!-- Logo -->
+    <img src="{{ asset('storage/osis2.png') }}" class="rounded-full w-20 h-20 mx-auto mb-6 shadow-lg ring-4 ring-white/20" alt="Logo OSIS">
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+    <!-- Header Text -->
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Welcome</h1>
+    <p class="text-center text-gray-500 text-sm mb-8">Login untuk memilih kandidat terbaik</p>
 
-            {{-- NIS --}}
-            <div class="mb-6">
-                <label for="nis" class="block font-medium">NIS</label>
-                <input type="text" id="nis" name="nis" required
-                    class="w-full mt-1 mb-3 border-gray-300 rounded-md">
-            </div>
+    <!-- Login Form -->
+    <form method="POST" action="{{ route('login.post') }}">
+      @csrf
 
-            {{-- Password --}}
-            <div class="mb-4">
-            <label for="password" class="block font-medium">Password</label>
-            <input type="password" id="password" name="password" required
-                    class="w-full mt-1 mb-4 border-gray-300 rounded-md">
-            </div>
+      <!-- NIS Field -->
+      <div class="mb-5">
+        <label for="nis" class="block text-gray-700 font-medium mb-2 text-left">NIS</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </span>
+          <input
+            id="nis"
+            name="nis"
+            type="text"
+            placeholder="Masukkan NIS Anda"
+            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+            required
+          />
+        </div>
+      </div>
 
-            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
-                Login
-            </button>
+      <!-- Password Field -->
+      <div class="mb-6">
+        <label for="password" class="block text-gray-700 font-medium mb-2 text-left">Password</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </span>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Masukkan password Anda"
+            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+            required
+          />
+        </div>
+      </div>
 
-            <footer>
-                <p class="pt-4 text-blue-500">2025 Dibuat Oleh Kenn</p>
-            </footer>
-        </form>
-    </div>
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+      >
+        Sign In
+      </button>
+    </form>
 
+    <!-- Footer -->
+    <p class="text-center text-gray-400 text-xs mt-8">
+      © 2025 Created by <span class="text-blue-500 font-semibold">Kennard</span>
+    </p>
+  </div>
 </body>
 </html>

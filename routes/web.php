@@ -3,21 +3,25 @@
 use Livewire\Volt\Volt;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\VoteController;
+use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\CreateUser;
+use App\Livewire\CandidateList;
+use App\Livewire\VoteSuccess;
+use App\Models\Candidate;
+use GuzzleHttp\Promise\Create;
 
+// Public Routes
+Route::get('/', fn () => view('auth.login'))->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post'); 
 
-Route::get('/', function () {
-    return view('auth.login');
-})->name('login.page');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-
-Route::get('/candidate', function () {
-    return view('livewire.candidate-list');
-})->name('candidate')->middleware(['auth']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/candidate', CandidateList::class)->name('candidate');
+    Route::get('/vote-success', VoteSuccess::class)->name('vote.success');
+});
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Volt::route('/dashboard', 'admin.dashboard')->name('dashboard');
-    Volt::route('/users', 'admin.create-user')->name('users');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/create-user', CreateUser::class)->name('create.user');
 });
-
-require __DIR__.'/auth.php';
