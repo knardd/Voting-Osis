@@ -14,23 +14,6 @@ class CandidateList extends Component
     public $selectedCandidate = null;
     public $voteSuccess = false;
     
-public function mount()
-{
-    $user = Auth::user();
-
-    // Kalau belum login
-    if (!$user) {
-        return redirect()->route('login');
-    }
-
-    // Kalau sudah vote, langsung blok
-    if ($user->has_voted) {
-        abort(403);
-        // ATAU redirect:
-        // return redirect()->route('vote.success');
-    }
-}
-
     public function openModal()
     {
         $this->showModal = true;

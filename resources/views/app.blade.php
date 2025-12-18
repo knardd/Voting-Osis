@@ -8,7 +8,7 @@
     @livewireStyles
 </head>
 <body class="bg-gray-100">
-    <livewire:candidate-list />
+    <livewire:candidate-list :wire:key="auth()->id() ?? 'guest'" />
     
     @livewireScripts
 </body>

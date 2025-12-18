@@ -12,7 +12,7 @@
 <body class="flex bg-gray-50">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg h-screen fixed">
+    <aside class="w-64 bg-white shadow-lg h-screen fixed flex flex-col">
         <div class="p-6 border-b">
             <div class="flex items-center space-x-3">
                 <img src="{{ asset('storage/osis2.png') }}" alt="" class="w-10 h-10">
@@ -27,8 +27,20 @@
                 <li><a href="{{ route('admin.create.user') }}" class="{{ request()->routeIs('admin.create.user') ? 'flex items-center px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-medium' : 'flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg' }}">
                     <i class="fa-solid fa-user-plus mr-3 text-blue-600"></i> Create User
                 </a></li>
+                
             </ul>
         </nav>
+
+        <!-- Logout Button (paling bawah) -->
+        <div class="px-4 py-4 mt-auto">
+            <form method="POST" action="{{ route('admin.logout') }}" class="w-full">
+                @csrf
+                <button type="submit" 
+                        class="w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg font-medium transition-colors">
+                    <i class="fa-solid fa-right-from-bracket mr-3 text-red-600"></i> Log Out
+                </button>
+            </form>
+        </div>
     </aside>
 
     <!-- Main -->

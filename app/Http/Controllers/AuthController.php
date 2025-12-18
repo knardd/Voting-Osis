@@ -27,8 +27,8 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'nis' => 'NIS atau password salah.',
-        ]);
+            'login' => 'NIS atau password salah.',
+        ])->withInput();
     }
 
     public function logout(Request $request)

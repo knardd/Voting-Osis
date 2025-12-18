@@ -16,6 +16,13 @@ class HasNotVoted
      */
     public function handle(Request $request, Closure $next): Response
     {
+    $user = Auth::user();
+    // Kalau belum login
+    if (!$user) {
+        return redirect()->route('login');
+    }
+
+    // Kalau sudah voting
         if (Auth::check() && Auth::user()->has_voted) {
         abort(403, 'Anda sudah melakukan voting');
         // atau redirect

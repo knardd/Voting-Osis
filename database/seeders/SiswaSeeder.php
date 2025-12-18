@@ -27,6 +27,7 @@ class SiswaSeeder extends Seeder
                 'nis' => $item['nis'],
                 'role' => 'siswa',
                 'password' => Hash::make($item['password']),
+                'plain_password' => $item['password'],
             ]);
         }
 

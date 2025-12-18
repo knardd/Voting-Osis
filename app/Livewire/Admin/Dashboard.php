@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\Candidate;
+
 use Livewire\Attributes\Layout;
 
 #[Layout('components.admin-layout')]
@@ -29,7 +30,8 @@ class Dashboard extends Component
 
         return view('livewire.admin.dashboard', compact(
             'totalUsers', 'voted', 'notVoted',
-            'candidateNames', 'voteCounts', 'percentages'
+            'candidateNames', 'voteCounts', 'percentages',
+            'totalVotes',
         ));
     }
 }

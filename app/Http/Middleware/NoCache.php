@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class VoteSuccess
+class NoCache
 {
     /**
      * Handle an incoming request.
@@ -16,11 +15,13 @@ class VoteSuccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = Auth::user();
-        if (!$user->has_voted) {
-        abort(403, 'Anda belum melakukan voting');
-    }
+        $response = $next($request);
 
+        // Tambahkan header anti-cache
+        $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+        
         return $next($request);
     }
 }

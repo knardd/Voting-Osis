@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\NoCache;
 use App\Http\Middleware\HasNotVoted;
+use App\Http\Middleware\VoteSuccess;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,7 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => IsAdmin::class,
-            'hasNotVoted' => HasNotVoted::class
+            'hasNotVoted' => HasNotVoted::class,
+            'voteSuccess' => VoteSuccess::class,
+            'noCache' => NoCache::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

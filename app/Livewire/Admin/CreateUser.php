@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Hash;
 class CreateUser extends Component
 {
     public $jumlah_user = 1;
-    public $users = [];
 
     protected $rules = [
         'jumlah_user' => 'required|integer|min:1|max:500',
@@ -22,33 +21,48 @@ class CreateUser extends Component
     {
         $this->validate();
 
-        $this->users = [];
+        try {
+            for ($i = 0; $i < $this->jumlah_user; $i++) {
+                $nis = $this->generateNis();
+                $password = $this->generatePassword();
 
-        for ($i = 0; $i < $this->jumlah_user; $i++) {
-            $nis = $this->generateNis();
-            $password = $this->generatePassword();
-
-            $this->users[] = [
-                'nis' => $nis,
-                'password' => $password,
-            ];
+                // Langsung simpan ke database
+                User::create([
+                    'nis' => $nis,
+                    'password' => Hash::make($password),
+                    'plain_password' => $password, // Simpan password asli untuk referensi
+                ]);
+                
+                session()->flash('success', $this->jumlah_user . ' user berhasil dibuat!');
+            }
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Gagal membuat user: ' . $e->getMessage());
         }
     }
 
     private function generateNis()
     {
         // Format NIS: 8 digit angka acak
-        return str_pad(rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+        return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
     }
 
     private function generatePassword()
     {
         // Password: 8 digit angka acak
-        return str_pad(rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+        return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
     }
 
     public function render()
     {
-        return view('livewire.admin.create-user');
+        $users = User::orderBy('id', 'asc')->get()->map(function ($user) {
+            return [
+                'nis' => $user->nis,
+                'password' => $user->plain_password ?? '******', // fallback jika null
+            ];
+        })->toArray();
+        
+        return view('livewire.admin.create-user', [
+        'users' => $users]);
     }
 }

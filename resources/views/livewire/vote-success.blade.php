@@ -9,9 +9,17 @@
 
     <!-- Body -->
     <div class="px-8 pb-8 flex flex-col items-center">
-      <!-- Success Badge -->
-      <div class="w-28 h-28 rounded-full bg-blue-50 flex items-center justify-center mb-6 border-4 border-blue-100">
-        <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+      <!-- Konfirmasi Paslon -->
+      <div class="text-center mb-6">
+        <p class="text-gray-800 text-lg font-medium">
+          Anda memilih <span class="text-blue-700 font-bold">Paslon No. {{ $candidate->id }}</span>
+        </p>
+      </div>
+
+      <!-- Success Badge (centang tetap hijau!) -->
+      <div class="w-28 h-28 rounded-full bg-green-50 flex items-center justify-center mb-6 border-4 border-green-100 animate-scaleIn">
+        <svg class="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>
       </div>
@@ -22,9 +30,9 @@
         Partisipasi Anda sangat berarti untuk kemajuan sekolah kita!
       </p>
 
-      <!-- Button -->
+      <!-- Button (biru gradient) -->
       <button
-        wire:click="beranda"
+        wire:click="logout"
         class="w-full max-w-xs bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3.5 px-6 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
       >
         Kembali ke Beranda
