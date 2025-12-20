@@ -4,6 +4,7 @@ use Livewire\Volt\Volt;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VoteController;
+use App\Livewire\Admin\CreateCandidate;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\CreateUser;
 use App\Livewire\CandidateList;
@@ -24,5 +25,6 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/create-user', CreateUser::class)->name('create.user');
+    Route::get('/create-candidate', CreateCandidate::class)->name('create.candidate');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

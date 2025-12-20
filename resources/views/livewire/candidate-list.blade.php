@@ -60,128 +60,66 @@
     </div>
 
 <!-- Daftar Kandidat -->
-<!-- Daftar Kandidat - Versi Mirip Video -->
 <div class="py-20 px-4 bg-gray-50">
     <div class="max-w-6xl mx-auto">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-4">Pengenalan Kandidat</h2>
         <p class="text-center text-gray-600 mb-20">Kenali visi, misi, dan program kerja masing-masing kandidat</p>
 
-        <!-- PASLON 1 -->
-        <div class="flex flex-col md:flex-row items-center gap-8 mb-16 bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-            <div class="w-full md:w-1/3 flex justify-center">
-                <img src="{{ asset('storage/istockphoto-2218401959-612x612.jpg') }}" alt="Paslon 1" class="w-64 h-64 object-cover rounded-2xl border-4 border-blue-100 shadow-md">
-            </div>
-            <div class="w-full md:w-2/3 bg-blue-50 p-6 rounded-xl">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span>
-                    <h3 class="text-2xl font-bold text-blue-700">PASLON SATU</h3>
+        @foreach ($candidates as $index => $candidate)
+            @php
+                $isEven = ($index % 2 === 1); // index 0 = ganjil (Paslon 1), index 1 = genap (Paslon 2), dst.
+                $colorClass = match(($index % 3)) {
+                    0 => ['bg' => 'blue-50', 'text' => 'blue-700', 'border' => 'blue-100', 'badge' => 'blue-600'],
+                    1 => ['bg' => 'purple-50', 'text' => 'purple-700', 'border' => 'purple-100', 'badge' => 'purple-600'],
+                    2 => ['bg' => 'green-50', 'text' => 'green-700', 'border' => 'green-100', 'badge' => 'green-600'],
+                    default => ['bg' => 'gray-50', 'text' => 'gray-700', 'border' => 'gray-100', 'badge' => 'gray-600'],
+                };
+            @endphp
+
+            <div class="flex flex-col {{ $isEven ? 'md:flex-row-reverse' : 'md:flex-row' }} items-center gap-8 {{ $loop->last ? '' : 'mb-16' }} bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                <!-- Foto -->
+                <div class="w-full md:w-1/3 flex justify-center">
+                    <img src="{{ asset('storage/' . $candidate->photo) }}" alt="{{ $candidate->name }}" class="w-64 h-64 object-cover rounded-2xl border-4 border-{{ $colorClass['border'] }} shadow-md">
                 </div>
 
-                <div class="space-y-5">
-                    <div>
-                        <h4 class="font-semibold text-blue-700 flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Visi
-                        </h4>
-                        <p class="text-gray-700 leading-relaxed">Mewujudkan OSIS yang inovatif, inklusif, dan berintegritas untuk kemajuan sekolah.</p>
+                <!-- Visi & Misi -->
+                <div class="w-full md:w-2/3 {{ $colorClass['bg'] }} p-6 rounded-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="{{ $colorClass['badge'] }} text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">{{ $index + 1 }}</span>
+                        <h1>Paslon {{ $candidate->id }}</h1>
+                        <h3 class="text-2xl font-bold {{ $colorClass['text'] }}">{{ $candidate->name }}</h3>
                     </div>
 
-                    <div>
-                        <h4 class="font-semibold text-blue-700 flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                            Misi
-                        </h4>
-                        <ul class="list-disc pl-5 text-gray-700 space-y-1">
-                            <li>Meningkatkan partisipasi siswa dalam kegiatan OSIS.</li>
-                            <li>Membangun sistem aspirasi digital yang transparan.</li>
-                            <li>Memperkuat program kepedulian sosial dan lingkungan.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <div class="space-y-5">
+                        <!-- Visi -->
+                        <div>
+                            <h4 class="font-semibold {{ $colorClass['text'] }} flex items-center gap-2 mb-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Visi
+                            </h4>
+                            <p class="text-gray-700 leading-relaxed pl-5">{{ $candidate->visi }}</p>
+                        </div>
 
-        <!-- PASLON 2 -->
-        <div class="flex flex-col md:flex-row-reverse items-center gap-8 mb-16 bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-            <div class="w-full md:w-1/3 flex justify-center">
-                <img src="{{ asset('storage/istockphoto-22227338728-612x612.jpg') }}" alt="Paslon 2" class="w-64 h-64 object-cover rounded-2xl border-4 border-purple-100 shadow-md">
-            </div>
-            <div class="w-full md:w-2/3 bg-purple-50 p-6 rounded-xl">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span>
-                    <h3 class="text-2xl font-bold text-purple-700">PASLON DUA</h3>
-                </div>
-
-                <div class="space-y-5">
-                    <div>
-                        <h4 class="font-semibold text-purple-700 flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Visi
-                        </h4>
-                        <p class="text-gray-700 leading-relaxed">Menjadi jembatan aspirasi siswa yang kreatif dan bertanggung jawab.</p>
-                    </div>
-
-                    <div>
-                        <h4 class="font-semibold text-purple-700 flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                            Misi
-                        </h4>
-                        <ul class="list-disc pl-5 text-gray-700 space-y-1">
-                            <li>Mengadakan forum terbuka bulanan untuk seluruh siswa.</li>
-                            <li>Mendorong kolaborasi antar ekstrakurikuler.</li>
-                            <li>Meningkatkan kualitas acara sekolah berbasis nilai budaya.</li>
-                        </ul>
+                        <!-- Misi -->
+                        <div>
+                            <h4 class="font-semibold {{ $colorClass['text'] }} flex items-center gap-2 mb-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                                Misi
+                            </h4>
+                            <ul class="pl-5 text-gray-700 space-y-1">
+                                @foreach (explode("\n", $candidate->misi) as $misi)
+                                    <li>{{ $misi }}</li>
+                                @endforeach
+                            </ul>
+                          </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- PASLON 3 -->
-        <div class="flex flex-col md:flex-row items-center gap-8 bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-            <div class="w-full md:w-1/3 flex justify-center">
-                <img src="{{ asset('storage/istockphoto-2196902690-612x612.jpg') }}" alt="Paslon 3" class="w-64 h-64 object-cover rounded-2xl border-4 border-green-100 shadow-md">
-            </div>
-            <div class="w-full md:w-2/3 bg-green-50 p-6 rounded-xl">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span>
-                    <h3 class="text-2xl font-bold text-green-700">PASLON TIGA</h3>
-                </div>
-
-                <div class="space-y-5">
-                    <div>
-                        <h4 class="font-semibold text-green-700 flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Visi
-                        </h4>
-                        <p class="text-gray-700 leading-relaxed">Membangun OSIS yang peduli, berkarakter, dan berprestasi.</p>
-                    </div>
-
-                    <div>
-                        <h4 class="font-semibold text-green-700 flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                            Misi
-                        </h4>
-                        <ul class="list-disc pl-5 text-gray-700 space-y-1">
-                            <li>Menjalankan program “OSIS Peduli” untuk sesama.</li>
-                            <li>Membina bakat seni dan olahraga di sekolah.</li>
-                            <li>Mendorong budaya disiplin dan anti-bullying.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
 </div>
 
@@ -218,61 +156,57 @@
       </div>
 
       <!-- Modal Body - 3 Kandidat Horizontal -->
-      <div class="px-8 pb-8">
-        <div class="grid grid-cols-3 gap-6">
-          
-          <!-- PASLON 1 -->
-          <div class="text-center border-4 border-blue-200 shadow-md rounded-2xl p-4 hover:shadow-xl transition-all duration-300 hover:scale-110">
-            <div class="relative mb-4">
-              <div class="absolute -top-2 -left-2 w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg z-10">
-                1
-              </div>
-              <img src="{{ asset('storage/istockphoto-2218401959-612x612.jpg') }}" alt="">
-            </div>
-            <h3 class="font-bold text-gray-800 mb-3">PASLON SATU</h3>
-            <button wire:click="selectCandidate(1)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all hover:shadow-lg flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Pilih Kandidat
-            </button>
-          </div>
+<div class="px-8 pb-8">
+    @if ($candidates->count() > 0)
+        <!-- Tentukan jumlah kolom berdasarkan jumlah kandidat -->
+        @php
+            $cols = match(true) {
+                $candidates->count() >= 3 => 'grid-cols-3',
+                $candidates->count() == 2 => 'grid-cols-2',
+                default => 'grid-cols-1',
+            };
+        @endphp
 
-          <!-- PASLON 2 -->
-          <div class="text-center border-4 border-purple-200 shadow-md rounded-2xl p-4 hover:shadow-xl transition-all duration-300 hover:scale-110">
-            <div class="relative mb-4">
-              <div class="absolute -top-2 -left-2 w-10 h-10 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg z-10">
-                2
-              </div>
-              <img src="{{ asset('storage/istockphoto-22227338728-612x612.jpg') }}" alt="">
-            </div>
-            <h3 class="font-bold text-gray-800 mb-3">PASLON DUA</h3>
-            <button wire:click="selectCandidate(2)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all hover:shadow-lg flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Pilih Kandidat
-            </button>
-          </div>
+        <div class="grid {{ $cols }} gap-6 justify-items-center">
+            @foreach ($candidates as $candidate)
+                @php
+                    $color = match(($loop->index % 3)) {
+                        0 => 'blue',
+                        1 => 'purple',
+                        2 => 'green',
+                        default => 'blue',
+                    };
+                @endphp
 
-          <!-- PASLON 3 -->
-          <div class="text-center border-4 border-green-200 shadow-md rounded-2xl p-4 hover:shadow-xl transition-all duration-300 hover:scale-110">
-            <div class="relative mb-4">
-              <div class="absolute -top-2 -left-2 w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg z-10">
-                3
-              </div>
-              <img src="{{ asset('storage/istockphoto-2196902690-612x612.jpg') }}" alt="">
-            </div>
-            <h3 class="font-bold text-gray-800 mb-3">PASLON TIGA</h3>
-            <button wire:click="selectCandidate(3)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all hover:shadow-lg flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Pilih Kandidat
-            </button>
-          </div>
+                <div class="text-center border-4 border-{{ $color }}-200 shadow-md rounded-2xl p-4 hover:shadow-xl transition-all duration-300 hover:scale-110 max-w-xs">
+                    <div class="relative mb-4">
+                        <div class="absolute -top-2 -left-2 w-10 h-10 bg-{{ $color }}-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg z-10">
+                            {{ $loop->index + 1 }}
+                        </div>
+                        <img 
+                            src="{{ $candidate->photo ? asset('storage/' . $candidate->photo) : asset('images/default-avatar.png') }}" 
+                            alt="{{ $candidate->name }}" 
+                            class="w-full h-auto max-h-64 object-cover rounded-xl"
+                        >
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-3">Paslon {{ $candidate->id }}</h3>
+                    <button 
+                        wire:click="selectCandidate({{ $candidate->id }})" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all hover:shadow-lg flex items-center justify-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Pilih Kandidat
+                    </button>
+                </div>
+            @endforeach
         </div>
-      </div>
+    @else
+        <p class="text-center text-gray-500 py-8">Belum ada kandidat tersedia.</p>
+    @endif
+</div>
+      
     </div>
   </div>
   </div>

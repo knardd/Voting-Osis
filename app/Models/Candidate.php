@@ -8,9 +8,9 @@ class Candidate extends Model
 {
     protected $fillable = [
         'name',
-        'class',
-        'vision',
-        'mission',
+        'visi',
+        'misi',
+        'photo',
     ];
 
     public function votes()
