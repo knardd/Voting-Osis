@@ -7,31 +7,51 @@ use Livewire\Component;
 use App\Models\Candidate;
 
 use Livewire\Attributes\Layout;
+use phpDocumentor\Reflection\Types\This;
 
 #[Layout('components.admin-layout')]
 class Dashboard extends Component
 {
-    public function render()
+    public $totalUsers;
+    public $voted;
+    public $notVoted;
+    public $candidateNames = [];
+    public $voteCounts = [];
+    public $percentages = [];
+    public $totalVotes;
+
+    public function mount()
     {
-        $totalUsers = User::count();
-        $voted = User::where('has_voted', true)->count();
-        $notVoted = $totalUsers - $voted;
+        $this->loadData();
+    }
+
+    public function loadData()
+    {
+        $this->totalUsers = User::count();
+        $this->voted = User::where('has_voted', true)->count();
+        $this->notVoted = $this->totalUsers - $this->voted;
 
         // Hitung suara per kandidat
         $candidates = Candidate::withCount('votes')->get();
-        $candidateNames = $candidates->pluck('name')->toArray();
-        $voteCounts = $candidates->pluck('votes_count')->toArray();
+
+        $this->candidateNames = $candidates->pluck('name')->toArray();
+        $this->voteCounts = $candidates->pluck('votes_count')->toArray();
 
         // Hitung persentase
-        $totalVotes = array_sum($voteCounts);
-        $percentages = $totalVotes > 0
-            ? array_map(fn($v) => round(($v / $totalVotes) * 100, 1), $voteCounts)
-            : array_fill(0, count($voteCounts), 0);
+        $totalVotes = array_sum($this->voteCounts);
+        $this->percentages = array_map(function($count) use ($totalVotes) {
+        return $totalVotes > 0 ? round(($count / $totalVotes) * 100, 1) : 0;
+    }, $this->voteCounts);
+    
+    $this->dispatch('refresh-charts');
+    }
 
-        return view('livewire.admin.dashboard', compact(
-            'totalUsers', 'voted', 'notVoted',
-            'candidateNames', 'voteCounts', 'percentages',
-            'totalVotes',
-        ));
+    public function refreshData()
+    {
+        $this->loadData();
+    }
+    public function render()
+    {
+        return view('livewire.admin.dashboard');
     }
 }

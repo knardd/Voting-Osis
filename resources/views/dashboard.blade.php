@@ -12,5 +12,6 @@
     
     <livewire:admin.dashboard />
     @livewireScripts
+    @stack('scripts')
 </body>
 </html>

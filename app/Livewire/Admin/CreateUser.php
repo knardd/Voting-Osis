@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 #[Layout('components.admin-layout')]
 class CreateUser extends Component
 {
-    public $jumlah_user = 1;
+    public $jumlah_user = null;
 
     protected $rules = [
         'jumlah_user' => 'required|integer|min:1|max:500',
@@ -19,26 +19,32 @@ class CreateUser extends Component
 
     public function generateUsers()
     {
+        try {
+        $this->validate();
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        $this->dispatch('alert', [
+            'type' => 'warning',
+            'message' => 'Jumlah user tidak boleh kosong!',
+        ]);
+        throw $e;
+    }
+
+    for ($i = 0; $i < $this->jumlah_user; $i++) {
+        $nis = $this->generateNis();
+        $password = $this->generatePassword();
+
+        User::create([
+            'nis' => $nis,
+            'password' => Hash::make($password),
+            'plain_password' => $password,
+        ]);
+    }
+
         $this->validate();
 
-        try {
-            for ($i = 0; $i < $this->jumlah_user; $i++) {
-                $nis = $this->generateNis();
-                $password = $this->generatePassword();
+        $this->resetForm();
+        $this->dispatch('alert', ['type' => 'success', 'message' => 'User berhasil ditambahkan!']);
 
-                // Langsung simpan ke database
-                User::create([
-                    'nis' => $nis,
-                    'password' => Hash::make($password),
-                    'plain_password' => $password, // Simpan password asli untuk referensi
-                ]);
-                
-                session()->flash('success', $this->jumlah_user . ' user berhasil dibuat!');
-            }
-            
-        } catch (\Exception $e) {
-            session()->flash('error', 'Gagal membuat user: ' . $e->getMessage());
-        }
     }
 
     private function generateNis()
@@ -51,6 +57,11 @@ class CreateUser extends Component
     {
         // Password: 8 digit angka acak
         return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+    }
+
+    public function resetForm()
+    {
+        $this->jumlah_user = null;
     }
 
     public function render()

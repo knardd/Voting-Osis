@@ -4,7 +4,7 @@
     <!-- Header -->
     <div class="text-center pt-8 pb-2 px-6">
       <h2 class="text-2xl md:text-3xl font-bold text-blue-700 mb-2">Vote Berhasil!</h2>
-      <p class="text-gray-600 text-sm">Terima kasih telah berpartisipasi dalam Pemilihan Ketua OSIS 2025/2026.</p>
+      <p class="text-gray-600 text-sm">Terima kasih telah berpartisipasi dalam Pemilihan Ketua OSIS 2026/2027.</p>
     </div>
 
     <!-- Body -->
@@ -33,7 +33,7 @@
       <!-- Button (biru gradient) -->
       <button
         wire:click="logout"
-        class="w-full max-w-xs bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3.5 px-6 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+        class="w-full max-w-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3.5 px-6 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
       >
         Kembali ke Beranda
       </button>

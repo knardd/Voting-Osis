@@ -7,6 +7,8 @@ use App\Models\Candidate;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+
 
 #[Layout('components.admin-layout')]
 class CreateCandidate extends Component
@@ -14,6 +16,7 @@ class CreateCandidate extends Component
     use WithFileUploads;
 
     public $name, $visi, $misi, $photo, $candidateId;
+    public $currentPhoto;
     public $candidates;
 
     protected $rules = [
@@ -62,23 +65,30 @@ class CreateCandidate extends Component
             $this->name = $candidate->name;
             $this->visi = $candidate->visi;
             $this->misi = $candidate->misi;
+            $this->photo = null;
+            $this->currentPhoto = $candidate->photo;
         }
     }
 
     public function update()
     {
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'visi' => 'required|string',
-            'misi' => 'required|string',
-            'photo' => 'required|image|max:2048',
-        ]);
+        $rules = [
+        'name' => 'required|string|max:255',
+        'visi' => 'required|string',
+        'misi' => 'required|string',
+    ];
+
+    if ($this->photo instanceof UploadedFile) {
+        $rules['photo'] = 'image|max:2048';
+    }
+
+        $this->validate($rules);
 
         $candidate = Candidate::find($this->candidateId);
         if (!$candidate) return;
 
         $photoPath = $candidate->photo;
-        if ($this->photo) {
+        if ($this->photo instanceof UploadedFile) {
             // Hapus foto lama
             if ($candidate->photo) {
                 Storage::disk('public')->delete($candidate->photo);
@@ -95,7 +105,7 @@ class CreateCandidate extends Component
 
         $this->resetForm();
         $this->loadCandidates();
-        $this->dispatch('alert', ['type' => 'info', 'message' => 'Kandidat berhasil diperbarui!']);
+        $this->dispatch('alert', ['type' => 'update', 'message' => 'Kandidat berhasil diperbarui!']);
     }
 
     public function destroy($id)
@@ -107,13 +117,24 @@ class CreateCandidate extends Component
             }
             $candidate->delete();
             $this->loadCandidates();
-            $this->dispatchBrowserEvent('alert', ['type' => 'warning', 'message' => 'Kandidat berhasil dihapus!']);
+            $this->dispatch('alert', ['type' => 'delete', 'message' => 'Kandidat berhasil dihapus!']);
         }
+    }
+
+    public function removePhoto()
+    {
+        $this->photo = null;
+        $this->currentPhoto = null;
+    }
+
+    public function cancel()
+    {
+        $this->photo = null;
     }
 
     public function resetForm()
     {
-        $this->reset(['name', 'visi', 'misi', 'photo', 'candidateId']);
+        $this->reset(['name', 'visi', 'misi', 'photo', 'currentPhoto', 'candidateId']);
     }
 
     public function render()
