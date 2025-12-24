@@ -95,7 +95,13 @@
         x-data="{
             show: false,
             message: '',
-            type: 'success'
+            type: 'success',
+            getTitle() {
+                return {
+                    'success': 'Success alert! ',
+                    'warning': 'Warning alert! ',
+                }[this.type] || 'Info';
+                }
         }"
         @alert.window="
             message = $event.detail[0]?.message || '';
@@ -124,17 +130,6 @@
             <span class="font-medium" x-text="getTitle()"></span>
             <span x-text="message"></span>
         </div>
-
-        <!-- Function helper untuk title dinamis -->
-        <script>
-            function getTitle() {
-                const titles = {
-                    'success': 'Success alert!',
-                    'warning': 'Warning alert!',
-                };
-                return titles[this.type] || 'Success alert!';
-            }
-        </script>
     </div>
 
     <style>

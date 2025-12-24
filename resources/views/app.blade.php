@@ -11,5 +11,7 @@
     <livewire:candidate-list :wire:key="auth()->id() ?? 'guest'" />
     
     @livewireScripts
+    @stack('scripts')
+    @stack('styles')
 </body>
 </html>

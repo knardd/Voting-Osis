@@ -1,223 +1,110 @@
-<div class="p-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Hasil Pemilihan</h1>
+<div class="p-6 space-y-6" wire:poll.5s="loadData">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">
+            <i class="fa-solid fa-chart-simple mr-2 text-blue-600"></i>Hasil Pemilihan
+        </h1>
+    </div>
 
-    <!-- Stat Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white p-4 rounded-xl shadow-md">
-            <div class="flex items-center">
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                    <i class="fa-solid fa-users text-blue-600"></i>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Total User</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ $totalUsers }}</p>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center">
+            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mr-4">
+                <i class="fa-solid fa-users text-blue-600 text-lg"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Total Pemilih</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $totalUsers }}</p>
             </div>
         </div>
 
-        <div class="bg-white p-4 rounded-xl shadow-md">
-            <div class="flex items-center">
-                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                    <i class="fa-solid fa-check-circle text-green-600"></i>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Sudah Memilih</p>
-                    <p class="text-2xl font-bold text-green-600">{{ $voted }}</p>
-                </div>
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center">
+            <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mr-4">
+                <i class="fa-solid fa-check-circle text-emerald-600 text-lg"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Suara Masuk</p>
+                <p class="text-2xl font-bold text-emerald-600">{{ $voted }}</p>
             </div>
         </div>
 
-        <div class="bg-white p-4 rounded-xl shadow-md">
-            <div class="flex items-center">
-                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                    <i class="fa-solid fa-clock text-red-600"></i>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Belum Memilih</p>
-                    <p class="text-2xl font-bold text-red-600">{{ $notVoted }}</p>
-                </div>
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center">
+            <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center mr-4">
+                <i class="fa-solid fa-hourglass-half text-rose-600 text-lg"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Belum Memilih</p>
+                <p class="text-2xl font-bold text-rose-600">{{ $notVoted }}</p>
             </div>
         </div>
     </div>
 
-<!-- Chart Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Bar Chart: Perolehan Suara -->
-        <div wire:ignore class="bg-white p-6 rounded-xl shadow-md">
-            <h2 class="text-lg font-semibold mb-4 text-gray-800">Perolehan Suara</h2>
-            <div class="relative" style="height: 300px;">
-                <canvas id="barChart"></canvas>
-            </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+    <h2 class="text-lg font-bold text-gray-800 mb-6">Perolehan Suara</h2>
+    
+    <div class="relative h-64 border-b-2 border-gray-200 flex items-end justify-around gap-2 px-2">
+        
+        <div class="absolute inset-0 flex flex-col justify-between pointer-events-none z-0">
+            <div class="w-full h-px border-t border-dashed border-gray-200"></div>
+            <div class="w-full h-px border-t border-dashed border-gray-200"></div>
+            <div class="w-full h-px border-t border-dashed border-gray-200"></div>
+            <div class="w-full h-px border-t border-dashed border-gray-200"></div>
         </div>
 
-        <!-- Pie Chart: Persentase Suara -->
-        <div wire:ignore class="bg-white p-6 rounded-xl shadow-md">
-            <h2 class="text-lg font-semibold mb-4 text-gray-800">Persentase Suara</h2>
-            <div class="relative" style="height: 300px;">
-                <canvas id="pieChart"></canvas>
+        @forelse($candidates as $candidate)
+            <div class="relative z-10 w-full flex flex-col items-center group h-full justify-end">
+                <span class="text-xs font-bold mb-1 text-gray-600">{{ $candidate['votes'] }}</span>
+                
+                <div class="{{ $candidate['color_class'] }} w-full max-w-[40px] rounded-t-md transition-all duration-1000 ease-out shadow-sm hover:opacity-80"
+                     style="height: {{ $candidate['height'] }}%;">
+                    
+                    <div class="absolute bottom-full mb-6 hidden group-hover:block bg-gray-800 text-white text-[10px] rounded px-2 py-1 whitespace-nowrap">
+                        {{ $candidate['percentage'] }}%
+                    </div>
+                </div>
+                
+                <span class="absolute top-full mt-2 text-[10px] font-bold text-gray-500 text-center leading-tight truncate w-full">
+                    {{ $candidate['name'] }}
+                </span>
             </div>
-        </div>
+        @empty
+            <p class="text-gray-400 text-sm pb-10">Data tidak tersedia</p>
+        @endforelse
     </div>
+    
+    <div class="h-8"></div> 
 </div>
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-    document.addEventListener('livewire:init', () => {
-        let barChartInstance = null;
-        let pieChartInstance = null;
+        <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 flex flex-col">
+            <h2 class="text-lg font-bold text-gray-800 mb-6">Persentase Suara</h2>
 
-        function initCharts() {
-            // Data dari Livewire
-            const labels = @json($candidateNames);
-            const votes = @json($voteCounts);
-            const percentages = @json($percentages);
+            <div class="flex-grow flex flex-col items-center justify-center">
+                @if($totalVotes > 0)
+                    <div class="relative w-48 h-48 rounded-full shadow-inner mb-8 transition-all duration-1000"
+                         style="background: conic-gradient({{ $pieChartGradient }});">
+                    </div>
 
-            // Warna dinamis untuk setiap kandidat
-            const colors = [
-                'rgba(59, 130, 246, 0.8)',   // Blue
-                'rgba(239, 68, 68, 0.8)',    // Red
-                'rgba(34, 197, 94, 0.8)',    // Green
-                'rgba(251, 146, 60, 0.8)',   // Orange
-                'rgba(168, 85, 247, 0.8)',   // Purple
-            ];
+                    <div class="w-full grid grid-cols-2 gap-3">
+                        @foreach($candidates as $candidate)
+                            <div class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition">
+                                <div class="w-3 h-3 rounded-full {{ $candidate['color_class'] }} mr-3 shadow-sm"></div>
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-bold text-gray-700">{{ $candidate['name'] }}</span>
+                                    <span class="text-xs text-gray-500">{{ $candidate['percentage'] }}% ({{ $candidate['votes'] }})</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-10 text-gray-400">
+                        <div class="w-48 h-48 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <i class="fa-solid fa-chart-pie text-4xl text-gray-300"></i>
+                        </div>
+                        <p>Menunggu suara masuk...</p>
+                    </div>
+                @endif
+            </div>
+        </div>
 
-            const borderColors = [
-                'rgba(59, 130, 246, 1)',
-                'rgba(239, 68, 68, 1)',
-                'rgba(34, 197, 94, 1)',
-                'rgba(251, 146, 60, 1)',
-                'rgba(168, 85, 247, 1)',
-            ];
-
-            // === BAR CHART ===
-            const barCtx = document.getElementById('barChart');
-            if (barCtx) {
-                if (barChartInstance) barChartInstance.destroy();
-
-                barChartInstance = new Chart(barCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Jumlah Suara',
-                            data: votes,
-                            backgroundColor: colors,
-                            borderColor: borderColors,
-                            borderWidth: 2,
-                            borderRadius: 8,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                padding: 12,
-                                titleFont: { size: 14, weight: 'bold' },
-                                bodyFont: { size: 13 },
-                                callbacks: {
-                                    label: function(context) {
-                                        return 'Suara: ' + context.parsed.y;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    precision: 0,
-                                    font: { size: 12 }
-                                },
-                                grid: {
-                                    color: 'rgba(0, 0, 0, 0.05)'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    font: { size: 12 }
-                                },
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        },
-                        animation: {
-                            duration: 1000,
-                            easing: 'easeInOutQuart'
-                        }
-                    }
-                });
-            }
-
-            // === PIE CHART ===
-            const pieCtx = document.getElementById('pieChart');
-            if (pieCtx) {
-                if (pieChartInstance) pieChartInstance.destroy();
-
-                pieChartInstance = new Chart(pieCtx, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: votes,
-                            backgroundColor: colors,
-                            borderColor: '#ffffff',
-                            borderWidth: 3,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    padding: 15,
-                                    font: { size: 12 },
-                                    usePointStyle: true,
-                                    pointStyle: 'circle'
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                padding: 12,
-                                titleFont: { size: 14, weight: 'bold' },
-                                bodyFont: { size: 13 },
-                                callbacks: {
-                                    label: function(context) {
-                                        const label = context.label || '';
-                                        const value = context.parsed;
-                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const percentage = ((value / total) * 100).toFixed(1);
-                                        return label + ': ' + value + ' (' + percentage + '%)';
-                                    }
-                                }
-                            }
-                        },
-                        animation: {
-                            animateRotate: true,
-                            animateScale: true,
-                            duration: 1000
-                        }
-                    }
-                });
-            }
-        }
-
-        // Inisialisasi pertama kali (delay untuk memastikan DOM ready)
-        setTimeout(initCharts, 100);
-
-        // ✅ LIVEWIRE 3: Update chart saat data berubah
-        document.addEventListener('refresh-charts', () => {
-            setTimeout(initCharts, 50);
-        });
-    });
-</script>
-@endpush
+    </div>
+</div>
