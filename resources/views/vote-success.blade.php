@@ -8,7 +8,7 @@
     @livewireStyles
 </head>
 <body class="bg-gray-100">
-
+    
     <livewire:vote-success />
     @livewireScripts
 </body>

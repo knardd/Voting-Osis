@@ -19,15 +19,16 @@ class Dashboard extends Component
     public $totalVotes = 0;
     public $candidates = [];
     public $pieChartGradient = ''; // String untuk CSS Conic Gradient
-    public $maxVotes = 0;
+    public $chartMax = 10;
+    public $chartSteps = [];
 
     // Definisi warna tetap agar konsisten antara Bar dan Pie Chart
     // Format: [Tailwind Class, Hex Code]
     protected $colorPalette = [
         ['bg-blue-500', '#3b82f6'],   // Kandidat 1
-        ['bg-purple-500', '#a855f7'], // Kandidat 2
-        ['bg-pink-500', '#ec4899'],   // Kandidat 3
-        ['bg-teal-500', '#14b8a6'],   // Kandidat 4
+        ['bg-indigo-500', '#6366F1'], // Kandidat 2
+        ['bg-violet-500', '#8B5CF6'],   // Kandidat 3
+        ['bg-green-500', '#22C55E'],   // Kandidat 4
         ['bg-amber-500', '#f59e0b'],  // Kandidat 5
     ];
 
@@ -47,7 +48,20 @@ class Dashboard extends Component
         // 2. Ambil Kandidat & Hitung Suara
         $candidatesData = Candidate::withCount('votes')->get();
         $this->totalVotes = $candidatesData->sum('votes_count');
-        $this->maxVotes = $candidatesData->max('votes_count') ?: 1;
+        
+        $realMax = $candidatesData->max('votes_count') ?: 0;
+
+        $this->chartMax = (ceil(($realMax + 1) / 10) * 10);
+
+        if ($this->chartMax == 0) $this->chartMax = 10;
+
+        // Membuat array langkah (steps) untuk label (misal: 50, 40, 30, 20, 10)
+        // Kita bagi menjadi 5 bagian
+        $stepSize = $this->chartMax / 5;
+        $this->chartSteps = [];
+        for ($i = 5; $i >= 1; $i--) {
+            $this->chartSteps[] = round($stepSize * $i);
+        }
 
         // 3. Proses Data Kandidat & Siapkan Visualisasi
         $processedCandidates = [];
@@ -65,7 +79,7 @@ class Dashboard extends Component
                 ? round(($candidate->votes_count / $this->totalVotes) * 100, 1) 
                 : 0;
 
-            $heightPercentage = ($candidate->votes_count / $this->maxVotes) * 100;
+            $heightPercentage = ($candidate->votes_count / $this->chartMax) * 100;
 
             // Masukkan ke array kandidat untuk View
             $processedCandidates[] = [

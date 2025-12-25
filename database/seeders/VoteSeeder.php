@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
+use App\Models\Vote;
+use App\Models\Candidate;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class VoteSeeder extends Seeder
 {
@@ -12,6 +15,14 @@ class VoteSeeder extends Seeder
      */
     public function run(): void
     {
+        $candidates = Candidate::pluck('id');
+
+        User::factory(150)->create()->each(function ($user) use ($candidates) {
+            Vote::create([
+                'user_id' => $user->id,
+                'candidate_id' => $candidates->random(),
+            ]);
+        });
         
     }
 }

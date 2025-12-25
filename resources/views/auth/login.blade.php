@@ -296,9 +296,7 @@
           this.isLoading = true;
           this.showError = false;
           // Form akan auto-submit ke Laravel
-          setTimeout(() => {
           e.target.submit()
-          }, 300)
         },
 
         createRipple(event) {
