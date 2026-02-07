@@ -24,7 +24,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-        'nis' => $this->faker->unique()->numerify('########'), // contoh NIS 8 digit
+        'token' => $this->faker->unique()->numerify('########'), // contoh token 8 digit
         'plain_password' => 'password',
         'password' => Hash::make('password'),
         'role' => 'siswa',

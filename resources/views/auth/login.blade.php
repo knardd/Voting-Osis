@@ -156,9 +156,9 @@
       <form method="POST" action="{{ route('login.post') }}" @submit.prevent="handleSubmit($event)">
         @csrf
 
-        <!-- NIS Field with Animation -->
+        <!-- Token Field with Animation -->
         <div class="mb-5 animate-slide-up delay-200" x-data="{ focused: false }">
-          <label for="nis" class="block text-gray-700 font-medium mb-2 text-left">NIS</label>
+          <label for="token" class="block text-gray-700 font-medium mb-2 text-left">Token</label>
           <div class="relative">
             <span 
               class="absolute left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-200"
@@ -169,10 +169,10 @@
               </svg>
             </span>
             <input
-              id="nis"
-              name="nis"
+              id="token"
+              name="token"
               type="text"
-              placeholder="Masukkan NIS Anda"
+              placeholder="Masukkan Token Anda"
               @focus="focused = true"
               @blur="focused = false"
               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all input-glow"

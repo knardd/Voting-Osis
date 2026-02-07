@@ -73,7 +73,7 @@
                     <thead class="bg-blue-50">
                         <tr>
                             <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Token</th>
                             <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Password</th>
                         </tr>
                     </thead>
@@ -81,7 +81,7 @@
                         @foreach($users as $index => $user)
                             <tr>
                                 <td class="py-3 px-4 text-sm text-gray-900">{{ $index + 1 }}</td>
-                                <td class="py-3 px-4 text-sm font-mono text-gray-900">{{ $user['nis'] }}</td>
+                                <td class="py-3 px-4 text-sm font-mono text-gray-900">{{ $user['token'] }}</td>
                                 <td class="py-3 px-4 text-sm font-mono text-gray-900">{{ $user['password'] }}</td>
                             </tr>
                         @endforeach

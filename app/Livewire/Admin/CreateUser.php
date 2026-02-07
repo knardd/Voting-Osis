@@ -30,11 +30,11 @@ class CreateUser extends Component
     }
 
     for ($i = 0; $i < $this->jumlah_user; $i++) {
-        $nis = $this->generateNis();
+        $token = $this->generateToken();
         $password = $this->generatePassword();
 
         User::create([
-            'nis' => $nis,
+            'token' => $token,
             'password' => Hash::make($password),
             'plain_password' => $password,
         ]);
@@ -47,15 +47,21 @@ class CreateUser extends Component
 
     }
 
-    private function generateNis()
+    private function generateToken($length = 6)
     {
-        // Format NIS: 8 digit angka acak
-        return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $token = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $token .= $characters[random_int(0, strlen($characters) - 1)];
+        }
+
+        return $token;
     }
 
     private function generatePassword()
     {
-        // Password: 8 digit angka acak
+        // Password: 6 digit angka acak
         return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
     }
 
@@ -68,7 +74,7 @@ class CreateUser extends Component
     {
         $users = User::orderBy('id', 'asc')->get()->map(function ($user) {
             return [
-                'nis' => $user->nis,
+                'token' => $user->token,
                 'password' => $user->plain_password ?? '******', // fallback jika null
             ];
         })->toArray();

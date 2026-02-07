@@ -10,7 +10,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'nis' => 'required',
+            'token' => 'required',
             'password' => 'required',
         ]);
 
@@ -26,7 +26,7 @@ class AuthController extends Controller
             return redirect()->route('candidate');
         }
 
-        return back()->with('login_error', 'NIS atau password salah.');
+        return back()->with('login_error', 'Token atau password salah.');
     }
 
     public function logout(Request $request)

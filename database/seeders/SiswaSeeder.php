@@ -15,16 +15,16 @@ class SiswaSeeder extends Seeder
     {
         // Buat beberapa user siswa untuk testing
         $siswa = [
-            ['nis' => '001', 'password' => 'password123'],
-            ['nis' => '002', 'password' => 'password123'],
-            ['nis' => '003', 'password' => 'password123'],
-            ['nis' => '004', 'password' => 'password123'],
-            ['nis' => '005', 'password' => 'password123'],
+            ['token' => '001', 'password' => 'password123'],
+            ['token' => '002', 'password' => 'password123'],
+            ['token' => '003', 'password' => 'password123'],
+            ['token' => '004', 'password' => 'password123'],
+            ['token' => '005', 'password' => 'password123'],
         ];
 
         foreach ($siswa as $item) {
             User::create([
-                'nis' => $item['nis'],
+                'token' => $item['token'],
                 'role' => 'siswa',
                 'password' => Hash::make($item['password']),
                 'plain_password' => $item['password'],
@@ -34,7 +34,7 @@ class SiswaSeeder extends Seeder
         echo "Siswa users created successfully!\n";
         echo "You can now login with:\n";
         foreach ($siswa as $item) {
-            echo "- NIS: {$item['nis']}, Password: {$item['password']}\n";
+            echo "- Token: {$item['token']}, Password: {$item['password']}\n";
         }
     }
 }
