@@ -4,9 +4,11 @@ namespace App\Livewire\Admin;
 
 use App\Models\User;
 use Livewire\Component;
+use App\Exports\UsersExport;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('components.admin-layout')]
 class CreateUser extends Component
@@ -63,6 +65,11 @@ class CreateUser extends Component
     {
         // Password: 6 digit angka acak
         return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 
     public function resetForm()

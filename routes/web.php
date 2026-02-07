@@ -1,25 +1,24 @@
 <?php
 
 use Livewire\Volt\Volt;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\VoteController;
-use App\Livewire\Admin\CreateCandidate;
+use App\Models\Candidate;
+use App\Exports\UsersExport;
+use App\Livewire\VoteSuccess;
+use GuzzleHttp\Promise\Create;
+use App\Livewire\CandidateList;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\CreateUser;
-use App\Livewire\CandidateList;
-use App\Livewire\VoteSuccess;
-use App\Models\Candidate;
-use GuzzleHttp\Promise\Create;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\Admin\CreateCandidate;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\VoteController;
 
 // Public Routes
-Route::get('/', fn () => view('auth.login'))->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post'); 
-
-// Route::middleware(['auth'])->group(function () {
+    Route::get('/', fn () => view('auth.login'))->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/candidate', CandidateList::class)->middleware('hasNotVoted', 'noCache')->name('candidate');
     Route::get('/vote-success', VoteSuccess::class)->middleware('noCache')->name('vote.success');
-// });
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -27,4 +26,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/create-user', CreateUser::class)->name('create.user');
     Route::get('/create-candidate', CreateCandidate::class)->name('create.candidate');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::get('/export-users', function () {
+    return Excel::download(new UsersExport, 'users.xlsx');
 });

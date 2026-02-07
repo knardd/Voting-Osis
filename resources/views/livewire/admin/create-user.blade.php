@@ -54,7 +54,7 @@
         <div class="mt-6">
             <div class="flex justify-between items-center mb-4">
                 <h4 class="font-semibold text-gray-700">Daftar User yang Dibuat</h4>
-                <button class="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition flex items-center gap-2">
+                <button wire:click="exportExcel" class="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-xls">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                         <path d="M14 3v4a1 1 0 0 0 1 1h4" />
